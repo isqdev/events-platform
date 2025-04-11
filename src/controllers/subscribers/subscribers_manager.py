@@ -4,7 +4,7 @@ from src.model.repositories.interfaces.subscriber_repository import SubscribersR
 
 class SubscriberManager:
     def __init__(self, subscribers_repo: SubscribersRepositoryInterface):
-        self.__subscriber_repo = subscribers_repo
+        self.__subscribers_repo = subscribers_repo
     
     def get_subscribers_by_link(self, http_request: HttpRequest) -> HttpResponse:
         link = http_request.param["link"]
@@ -13,7 +13,7 @@ class SubscriberManager:
         return self.__format_subs_by_link(subs)
 
     def get_event_ranking(self, http_request: HttpRequest) -> HttpResponse:
-        event_id = http_request.param("event_id")
+        event_id = http_request.param["event_id"]
         event_ranking = self.__subscribers_repo.get_ranking(event_id)
         return self.__format_event_ranking(event_ranking)
     
@@ -33,7 +33,8 @@ class SubscriberManager:
                     "count": len(formatted_subscriber),
                     "subscribers": formatted_subscriber
                 }
-            }
+            },
+            status_code=200
         )
     
     def __format_event_ranking(self, event_ranking: list) -> HttpResponse:
@@ -53,5 +54,6 @@ class SubscriberManager:
                     "count": len(formatted_event_ranking),
                     "ranking": formatted_event_ranking
                 }
-            }
+            },
+            status_code=200
         )
